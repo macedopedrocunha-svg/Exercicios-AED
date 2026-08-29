@@ -1,0 +1,510 @@
+Exercicio 1)
+a) O valor do ponteiro *p é 3.
+b) O valor da subtração dos ponteiros *p - *a, pensando que *p = 3 e *q = 5, o valor da subtração é - 2;
+c) O valor do ponteiro **&p vale a mesma coisa do que ler apenas o endereço de p, ou sej
+d) O valor seria 0/12, ou seja, 0;
+
+Exercicio 2)
+a) O valor do *p vai receber o valor 5, pois o *p esta recebendo o endereço do *a; //que no caso seria o valor de j;
+b) Nesse caso o p vai "virar" o q, pois ele vai receber o endereço de 9;
+c) O valor que *p vai receber é a soma de *p com *a, ou seja, ele vai receber o valor 8;
+d) O endereço de a vai ser o valor de i, no caso 3, e o valor do *a vai ser 100;
+
+Exercicio 3) 
+a)  p = v, Legal, pois faz p apontar para o primeiro elemento do vetor.
+b)  p = &v, Ilegal, pois gera um erro de incompatibilidade de ponteiros.
+c) p = &v[0], Legal, pois faz o ponteiro p apontar para v[0].
+d) v = p, Ilegal, não pode reatribuir o endereço base de um vetor estático.
+e) p = v + 2, Legal, faz p apontar para o terceiro elemento do vetor (&v[2]).
+
+Exercicio 4)
+em printf("%d\n", *p), ele vai atribuir o valor que esta no vetor, ou seja, ele vai printar (2):
+em printf("%d\n", *(p + 2)), ele vai printar (6); em printf("%d\n", p[3]), ele vai printar o valor (8);
+em printf("%d\n", *p + 1), ele vai printar o valor (3), pois, ele atribui *p = 2 , vai somar com +1 = 3;
+em printf("%d\n", *(v + 4)), ele vai printar o valor de um vetor como se fosse um v[4], porem com o vetor sendo = [4,6,8,10};
+
+Exercicio 5)
+#include <stdio.h>
+
+void inverter(int *v, int n) {
+    int *inicio = v;
+    int *fim = v + n - 1;
+    int temp;
+
+    while (inicio < fim) {
+        temp = *inicio;
+        *inicio = *fim;
+        *fim = temp;
+
+        inicio++;
+        fim--;
+    }
+}
+
+int main() {
+    int v[] = {10, 20, 30, 40, 50};
+    int n = 5;
+
+    inverter(v, n);
+    for (int i = 0; i < n; i++) {
+        printf("%d ", v[i]);
+    }
+
+    return 0;
+}
+
+Exercicio 6)
+
+#include <stdio.h>
+
+int soma(int *v, int n) {
+    int s = 0;
+    int *p = v;
+    int *fim = v + n;
+
+    while (p < fim) {
+        s += *p;
+        p++;
+    }
+
+    return s;
+}
+
+Exercício 7)
+
+#include <stdio.h>
+
+void troca_vizinhos(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int main() {
+    int v[] = {10, 20, 30, 40, 50, 60};
+    int n = 6;
+
+    for (int i = 0; i < n; i += 2) {
+        troca_vizinhos(&v[i], &v[i + 1]);
+    }
+
+    for (int i = 0; i < n; i++) {
+        printf("%d ", v[i]);
+    }
+
+    return 0;
+}
+
+Exercício 8)
+
+#include <stdio.h>
+
+void min_max(int *v, int n, int *min, int *max) {
+    if (n <= 0) return;
+
+    *min = *v;
+    *max = *v;
+
+    for (int *p = v + 1; p < v + n; p++) {
+        if (*p < *min) {
+            *min = *p;
+        }
+        if (*p > *max) {
+            *max = *p;
+        }
+    }
+}
+
+int main() {
+    int v[] = {35, 12, 89, 4, 56, 23};
+    int n = 6;
+    int menor, maior;
+
+    min_max(v, n, &menor, &maior);
+
+    printf("Menor elemento: %d\n", menor);
+    printf("Maior elemento: %d\n", maior);
+
+    return 0;
+}
+
+
+Exercício 9)
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int *copia_vetor(int *v, int n) {
+    if (n <= 0 || v == NULL) return NULL;
+
+    int *novo = (int *) malloc(n * sizeof(int));
+    if (novo == NULL) return NULL;
+
+    for (int i = 0; i < n; i++) {
+        *(novo + i) = *(v + i);
+    }
+
+    return novo;
+}
+
+int main() {
+    int v[] = {10, 20, 30, 40, 50};
+    int n = 5;
+
+    int *copia = copia_vetor(v, n);
+
+    if (copia != NULL) {
+        printf("Vetor original: ");
+        for (int i = 0; i < n; i++) {
+            printf("%d ", v[i]);
+        }
+
+        printf("\nVetor copiado:  ");
+        for (int i = 0; i < n; i++) {
+            printf("%d ", copia[i]);
+        }
+        printf("\n");
+
+        free(copia);
+    }
+
+    return 0;
+}
+
+Exercício 10)
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int *v = NULL;
+    int qtd = 0;
+    int num;
+
+    while (1) {
+        printf("Digite um numero inteiro (-1 para encerrar): ");
+        scanf("%d", &num);
+
+        if (num == -1) {
+            break;
+        }
+
+        int *temp = (int *) realloc(v, (qtd + 1) * sizeof(int));
+        if (temp == NULL) {
+            printf("Erro de alocacao de memoria.\n");
+            free(v);
+            return 1;
+        }
+        v = temp;
+
+        v[qtd] = num;
+        qtd++;
+    }
+
+    if (qtd == 0) {
+        printf("\nNenhum numero foi inserido.\n");
+        free(v);
+        return 0;
+    }
+
+    int menor = v[0];
+    int maior = v[0];
+
+    printf("\nValores armazenados: ");
+    for (int i = 0; i < qtd; i++) {
+        printf("%d ", v[i]);
+
+        if (v[i] < menor) {
+            menor = v[i];
+        }
+        if (v[i] > maior) {
+            maior = v[i];
+        }
+    }
+
+    printf("\nQuantidade de elementos: %d\n", qtd);
+    printf("Maior valor: %d\n", maior);
+    printf("Menor valor: %d\n", menor);
+
+    free(v);
+    v = NULL;
+
+    return 0;
+}
+
+Exercício 11)
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int *concatenar(int *v1, int n1, int *v2, int n2, int *n3) {
+    int x = n1 + n2;
+    *n3 = x;
+    int *res = (int *)malloc(x * sizeof(int));
+        for (int i =0; i < n1; i++) {
+            res[i] = v1[i];
+        }
+            for (int i=0; i < n2; i++) {
+            res[n1 +i] = v2[i];
+
+            }
+        return res;
+
+    }
+
+    int main() {
+
+        int n1, n2, n3;
+        int *v1, *v2, *res;
+
+        printf("Digite o tamanho do primeiro vetor: ");
+        scanf("%d", &n1);
+        v1 = (int *)malloc(n1 * sizeof(int));
+        printf("Digite os elementos do primeiro vetor: ");
+        
+        for (int i = 0; i < n1; i++) {
+            scanf("%d", &v1[i]);
+        }
+
+        printf("Digite o tamanho do segundo vetor: ");
+        scanf("%d", &n2);
+        v2 = (int *)malloc(n2 * sizeof(int));
+        printf("Digite os elementos do segundo vetor: ");
+
+        for( int i = 0; i< n2; i++) {
+            scanf("%d", &v2[i]);
+        }
+        res = concatenar(v1, n1, v2, n2, &n3);
+        printf("Tamanho concatenado do: %d\n", n3);
+        printf("Vetor concatenado: ");
+        for (int i = 0; i < n3; i++) {
+            printf("%d ", res[i]);
+        }
+
+
+        return 0;
+        free(v1);
+        free(v2);
+        free(res);
+
+    }
+
+Exercício 12)
+
+#include <stdio.h>
+#include <stdlib.h>
+
+        int *inserir(int *v, int *n, int valor) {
+            int *res = (int *)realloc(v, (*n +1) * sizeof(int));
+            if (res == NULL) {
+                printf("Erro ao realocar memoria.\n");
+            } else {
+                res[*n] = valor;
+                (*n)++;
+            }
+            return res;
+        }
+
+        int main() {
+            int n = 0;
+            int *v = NULL;
+            printf("Digite os elementos do vetor (digite -1 para parar): ");
+            while (1) {
+                int valor;
+                scanf("%d", &valor);
+                if (valor == -1) {
+                    break;
+                }
+                v = inserir(v, &n, valor);
+        }
+         
+            printf("Vetor final: ");
+            for (int i = 0; i < n; i++) {
+                printf("%d ", v[i]);
+            }
+            printf("\n");
+
+            free(v);
+            return 0;
+        }
+
+Exercicio 13)
+
+#include <stdio.h>
+        #include <stdlib.h>
+
+        int *remover(int **v, int *n, int posicao) {
+            if (posicao < 0 || posicao >= *n) {
+                printf("Posição inválida.\n");
+                return *v;
+            } else {
+                for (int i = posicao; i < *n -1; i++) {
+                    (*v)[i] = (*v)[i +1];
+                }
+                (*n)--;
+                int *res = (int *)realloc(*v, (*n) * sizeof(int));
+                if (res == NULL && *n > 0) {
+                    printf("Erro ao realocar memória.\n");
+                    return *v;
+                } else {
+                    *v = res;
+                    return *v;
+                }
+            }
+        }
+
+        int main() {
+            int n = 0;
+            int *v = NULL;
+            printf("Digite os elementos do vetor (digite -1 para parar): '\n");
+            while (1) {
+                int valor;
+                scanf("%d", &valor);
+                if (valor == -1) {
+                    break;
+                }else {
+                    int *res = (int *)realloc(v, (n + 1) * sizeof(int));
+                    if (res == NULL) {
+                        printf("Erro ao realocar memória.\n");
+                        free(v);
+                        return 1;
+                    } else {
+                        v = res;
+                        v[n] = valor;
+                        n++;
+                    }
+                }
+        }
+        
+            printf("Vetor final: ");
+            for (int i = 0; i < n; i++) {
+                printf("%d ", v[i]);
+            }
+            printf("\n");
+
+            int posicao;
+            printf("Digite a posição do elemento a ser removido (sendo 0 a posição inicial):  ");
+            scanf("%d", &posicao);
+            v = remover(&v, &n, posicao);
+
+            printf("Vetor após remoção: ");
+            for (int i = 0; i < n; i++) {
+                printf("%d ", v[i]);
+            }
+            printf("\n");
+
+            free(v);
+            return 0;
+        }
+
+Exercicio 14)
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int *intercalar(int *v1, int *v2, int n, int *n3) {
+    *n3 = 2 * n;
+    
+    int *res = (int *) malloc((*n3) * sizeof(int));
+    if (res == NULL) return NULL;
+
+    for (int i = 0; i < n; i++) {
+        res[2 * i]     = v1[i];
+        res[2 * i + 1] = v2[i];
+    }
+
+    return res;
+}
+
+int main() {
+    int n = 3;
+    int v1[] = {10, 20, 30};
+    int v2[] = {40, 50, 60};
+    int n3;
+
+    int *resultado = intercalar(v1, v2, n, &n3);
+
+    if (resultado != NULL) {
+        printf("Resultado: ");
+        for (int i = 0; i < n3; i++) {
+            printf("%d ", resultado[i]);
+        }
+        printf("\n");
+
+        free(resultado);
+    }
+
+    return 0;
+}
+
+Exercicio 15)
+
+ #include <stdio.h>
+            #include <stdlib.h>
+
+            int soma_diagonal(int **mat, int n) {
+                int soma = 0;
+                for (int i = 0; i < n; i++) {
+                    soma += mat[i][i];
+                }
+                return soma;
+            }
+
+            int main() {
+                int n;
+
+                printf("Difite o tamanho n da matriz quadrada (n x n): ");
+                scanf("%d", &n);
+
+                if (n <= 0) {
+                    printf("Tamanho invalido.\n");
+                    return 1;
+                }
+
+                int **mat = (int **) malloc(n * sizeof(int *));
+                if (mat == NULL) {
+                    printf("Erro de alocacao de memoria.\n");
+                    return 1;
+                }
+
+                for (int i = 0; i < n; i++) {
+                    mat[i] = (int *) malloc(n * sizeof(int));
+                    if (mat[i] == NULL) {
+                        printf("Erro de alocacao de memoria.\n");
+                        return 1;
+                    }
+                }
+
+                printf("Digite os %d elementos da matriz (linha por linha):\n", n * n);
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < n; j++) {
+                        scanf("%d", &mat[i][j]);
+                    }
+                }
+
+                printf("\nMatriz %dx%d:\n", n, n);
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < n; j++) {
+                        printf("%d\t", mat[i][j]);
+                    }
+                    printf("\n");
+                }
+
+                
+                int soma = soma_diagonal(mat, n);
+                printf("\nSoma da diagonal principal: %d\n", soma);
+
+                for (int i = 0; i < n; i++) {
+                    free(mat[i]);
+                }
+                free(mat);
+                mat = NULL;
+
+                return 0;
+            }
+
+
+
+
+
+
